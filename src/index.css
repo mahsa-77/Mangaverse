@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+body {
+  font-family: "Quicksand", sans-serif;
+  background: "#fff7fb";
+  color: "#5b4b63";
+  * {
+  transition: all 0.2s ease;
+  }
+  ::selection {
+  background: #f9a8d4;
+  color: white;
+}
+}

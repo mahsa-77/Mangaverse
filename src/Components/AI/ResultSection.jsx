@@ -1,0 +1,961 @@
+import {
+  Sparkles,
+  LibraryBig,
+  Smile,
+  LoaderCircle,
+} from "lucide-react";
+
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+
+import RecommendationCards from "./RecommendationCards";
+
+import {
+  findMangaByTitles,
+  getLibraryRecommendations,
+  getMoodRecommendations,
+  getRandomManga,
+} from "../../servisces/ai";
+
+
+
+export default function ResultSection({ mode }) {
+
+
+  const [prompt, setPrompt] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const [results, setResults] = useState([]);
+
+  const [message, setMessage] = useState("");
+
+
+
+
+
+  useEffect(() => {
+
+    setResults([]);
+
+    setMessage("");
+
+    setPrompt("");
+
+  }, [mode]);
+
+  /* ================= START REQUEST ================= */
+
+  const startRequest = () => {
+
+    setLoading(true);
+
+    setResults([]);
+
+    setMessage("");
+
+  };
+
+  /* ================= MOOD ================= */
+
+
+  const handleMoodRecommendation = async () => {
+
+
+    if (!prompt.trim()) {
+
+
+      setMessage(
+        "Please describe your mood first."
+      );
+
+
+      return;
+
+    }
+
+    startRequest();
+
+    try {
+
+
+      const titles =
+        await getMoodRecommendations(
+          prompt
+        );
+
+
+
+
+      const manga =
+        await findMangaByTitles(
+          titles
+        );
+
+
+
+      setResults(manga);
+
+
+
+      if (manga.length === 0) {
+
+        setMessage(
+          "No manga was found."
+        );
+
+      }
+
+
+
+    } catch (error) {
+
+
+      console.error(
+        "Mood recommendation error:",
+        error
+      );
+
+
+
+      setMessage(
+        "AI recommendation failed. Please check the server."
+      );
+
+
+
+    } finally {
+
+
+      setLoading(false);
+
+
+    }
+
+
+  };
+
+  /* ================= LIBRARY ================= */
+
+  const handleLibraryRecommendation =
+    async () => {
+
+
+      const library =
+        JSON.parse(
+          localStorage.getItem("library")
+        ) || [];
+
+
+
+      if (library.length === 0) {
+
+
+        setResults([]);
+
+
+
+        setMessage(
+          "Your library is empty, so there is no recommendation yet."
+        );
+
+
+
+        return;
+
+      }
+
+      startRequest();
+
+      try {
+
+
+        const titles =
+          await getLibraryRecommendations(
+            library
+          );
+
+
+
+        const manga =
+          await findMangaByTitles(
+            titles
+          );
+
+
+
+
+        const savedIds =
+          library
+            .map((item)=>{
+
+              return Number(
+                item.id ||
+                item.mal_id
+              );
+
+            })
+            .filter((id)=>{
+
+              return !Number.isNaN(id);
+
+            });
+
+
+        const savedTitles =
+          library
+            .map((item)=>{
+
+              return item.title
+                ?.trim()
+                .toLowerCase();
+
+            })
+            .filter(Boolean);
+
+
+        const newManga =
+          manga.filter((item)=>{
+
+
+            const itemTitle =
+              item.title
+              ?.trim()
+              .toLowerCase();
+
+
+            const alreadySavedById =
+              item.mal_id &&
+              savedIds.includes(
+                Number(item.mal_id)
+              );
+
+
+
+
+            const alreadySavedByTitle =
+              savedTitles.includes(
+                itemTitle
+              );
+
+
+
+
+            return (
+              !alreadySavedById &&
+              !alreadySavedByTitle
+            );
+
+
+          });
+
+
+
+
+        setResults(newManga);
+
+
+
+
+        if (newManga.length === 0) {
+
+
+          setMessage(
+            "No new manga recommendation was found."
+          );
+
+
+        }
+
+
+
+
+      } catch(error){
+
+
+        console.error(
+          "Library recommendation error:",
+          error
+        );
+
+
+
+        setMessage(
+          "AI recommendation failed. Please check the server."
+        );
+
+
+
+      } finally {
+
+
+        setLoading(false);
+
+
+      }
+
+
+    };
+
+
+  /* ================= RANDOM ================= */
+
+  const handleRandomRecommendation =
+    async () => {
+
+
+      const library =
+        JSON.parse(
+          localStorage.getItem("library")
+        ) || [];
+
+
+
+
+      startRequest();
+
+
+
+
+      try {
+
+
+        const manga =
+          await getRandomManga(
+            library
+          );
+
+
+
+
+        if (manga) {
+
+
+          setResults([
+            manga
+          ]);
+
+        } else {
+
+
+          setMessage(
+            "A manga recommendation could not be found. Please try again."
+          );
+
+
+        }
+
+
+
+      } catch(error){
+
+
+        console.error(
+          "Random recommendation error:",
+          error
+        );
+
+
+
+        setMessage(
+          "AI recommendation failed. Please check the server."
+        );
+
+
+      } finally {
+
+
+        setLoading(false);
+
+
+      }
+
+
+    };
+
+
+  if (!mode) {
+
+    return null;
+
+  }  return (
+
+    <motion.section
+
+      key={mode}
+
+      initial={{
+        opacity: 0,
+        y: 20,
+        scale: 0.98,
+      }}
+
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+
+      transition={{
+        duration: 0.45,
+        ease: "easeOut",
+      }}
+
+
+      className="
+        max-w-5xl
+
+        mx-auto
+
+        mt-10
+
+        px-4
+        sm:px-6
+      "
+
+    >
+
+      <div
+
+        className="
+          rounded-3xl
+
+          bg-white/25
+
+          backdrop-blur-xl
+
+          border
+
+          border-white/40
+
+          shadow-2xl
+
+          p-5
+          sm:p-8
+        "
+
+      >
+
+
+        {/* ================= MOOD ================= */}
+
+
+        {mode === "mood" && (
+
+          <>
+
+
+            <div
+
+              className="
+                flex
+
+                items-center
+
+                gap-3
+
+                mb-6
+              "
+
+            >
+
+              <Smile
+
+                className="
+                  text-pink-500
+                "
+
+                size={30}
+
+              />
+
+
+
+              <h2
+
+                className="
+                  text-2xl
+
+                  font-bold
+
+                  text-purple-700
+                "
+
+              >
+
+                Describe Your Mood
+
+              </h2>
+
+
+            </div>
+
+
+
+
+
+            <p className="text-gray-700 mb-5">
+
+              Tell AI what kind of manga you're looking for.
+
+            </p>
+
+
+            <textarea
+
+              value={prompt}
+
+
+              onChange={(event)=>{
+
+                setPrompt(
+                  event.target.value
+                );
+
+              }}
+
+
+              placeholder="
+              Example: I want a dark mystery with romance and an unexpected ending...
+              "
+              style={{
+                paddingTop: "16px"
+              }}
+
+              className="
+                w-full
+
+                h-36
+
+                rounded-2xl
+
+                border
+
+                border-purple-200
+
+                bg-white/70
+
+                p-4
+
+                resize-none
+
+                outline-none
+
+                focus:ring-2
+
+                focus:ring-fuchsia-300
+              "
+
+            />
+
+
+            <button
+
+              onClick={
+                handleMoodRecommendation
+              }
+
+
+              disabled={loading}
+
+
+              className="
+                mt-6
+
+                px-8
+
+                py-3
+
+                rounded-full
+
+                bg-gradient-to-r
+
+                from-pink-300
+
+                to-fuchsia-400
+
+                text-white
+
+                font-semibold
+
+                hover:scale-105
+
+                transition
+
+                disabled:opacity-60
+
+                disabled:cursor-not-allowed
+              "
+
+            >
+
+              Find Manga ✨
+
+            </button>
+
+
+
+          </>
+
+        )}
+
+
+        {/* ================= LIBRARY ================= */}
+
+
+
+        {mode === "library" && (
+
+          <>
+
+
+            <div
+
+              className="
+                flex
+
+                items-center
+
+                gap-3
+
+                mb-6
+              "
+
+            >
+
+
+              <LibraryBig
+
+                className="
+                  text-violet-500
+                "
+
+                size={30}
+
+              />
+
+
+
+              <h2
+
+                className="
+                  text-2xl
+
+                  font-bold
+
+                  text-purple-700
+                "
+
+              >
+
+                Discover My Library
+
+              </h2>
+
+
+            </div>
+
+
+
+
+
+            <p className="text-gray-700 mb-6">
+
+              AI will analyze your saved manga and recommend your next read.
+
+            </p>
+
+            <button
+
+              onClick={
+                handleLibraryRecommendation
+              }
+
+
+              disabled={loading}
+
+
+              className="
+                px-8
+
+                py-3
+
+                rounded-full
+
+                bg-gradient-to-r
+
+                from-violet-400
+
+                to-fuchsia-400
+
+                text-white
+
+                font-semibold
+
+                hover:scale-105
+
+                transition
+
+                disabled:opacity-60
+
+                disabled:cursor-not-allowed
+              "
+
+            >
+
+              Analyze My Library 📚
+
+            </button>
+
+
+
+          </>
+
+        )}
+
+        {/* ================= RANDOM ================= */}
+
+
+
+        {mode === "random" && (
+
+          <>
+
+
+            <div
+
+              className="
+                flex
+
+                items-center
+
+                gap-3
+
+                mb-6
+              "
+
+            >
+
+
+              <Sparkles
+
+                className="
+                  text-fuchsia-500
+                "
+
+                size={30}
+
+              />
+
+
+
+              <h2
+
+                className="
+                  text-2xl
+
+                  font-bold
+
+                  text-purple-700
+                "
+
+              >
+
+                Surprise Me
+
+              </h2>
+
+
+            </div>
+
+
+            <p className="text-gray-700 mb-6">
+
+              Let AI choose a random manga you'll probably enjoy.
+
+            </p>
+
+            <button
+
+              onClick={
+                handleRandomRecommendation
+              }
+
+
+              disabled={loading}
+
+
+              className="
+                px-8
+
+                py-3
+
+                rounded-full
+
+                bg-gradient-to-r
+
+                from-violet-400
+
+                to-fuchsia-400
+
+                text-white
+
+                font-semibold
+
+                hover:scale-105
+
+                transition
+
+                disabled:opacity-60
+
+                disabled:cursor-not-allowed
+              "
+
+            >
+
+              Surprise Me 🎲
+
+            </button>
+
+
+
+          </>
+
+        )}
+
+        {/* ================= LOADING ================= */}
+
+        {loading && (
+
+          <div
+
+            className="
+              flex
+
+              items-center
+
+              gap-3
+
+              mt-8
+
+              text-purple-700
+            "
+
+          >
+
+            <LoaderCircle
+
+              className="
+                animate-spin
+              "
+
+              size={24}
+
+            />
+
+
+            <p>
+              Finding manga...
+            </p>
+
+
+          </div>
+
+        )}
+
+
+        {/* ================= MESSAGE ================= */}
+
+
+
+        {message && !loading && (
+
+          <p
+
+            className="
+              mt-8
+
+              text-purple-800
+
+              font-semibold
+            "
+
+          >
+
+            {message}
+
+          </p>
+
+        )}
+
+
+        {/* ================= RESULTS ================= */}
+
+
+
+        {results.length > 0 && !loading && (
+
+          <>
+
+
+            {
+              results.some(
+                (manga)=>
+                  manga.isFallback
+              )
+
+              &&
+
+              (
+
+                <p
+
+                  className="
+                    mt-8
+
+                    mb-4
+
+                    rounded-xl
+
+                    bg-yellow-50/80
+
+                    border
+
+                    border-yellow-200
+
+                    p-4
+
+                    text-sm
+
+                    text-yellow-800
+                  "
+
+                >
+
+                  Jikan is currently unable to connect to MyAnimeList.
+                  AI titles are still shown, but some images,
+                  ratings and detail links are unavailable.
+
+                </p>
+
+              )
+
+            }
+
+
+            <RecommendationCards
+
+              mangas={results}
+
+            />
+
+          </>
+
+        )}
+
+      </div>
+
+    </motion.section>
+  );
+
+}
