@@ -2,46 +2,42 @@ import logo from "../assets/download.png";
 import anime from "../assets/images.png";
 import { Link } from "react-router-dom";
 import { Compass, BookOpen, UserRound } from "lucide-react";
-
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
-
   return (
     <>
-
       <header
         className="
           sticky
           top-0
           z-50
-
           min-h-20
           md:h-24
-
           px-3
           sm:px-5
           md:px-8
-
           flex
           items-center
           justify-between
-
-          bg-white/80
           backdrop-blur-xl
-
           border-b
-          border-pink-200/60
-
-          shadow-lg
-          shadow-pink-200/30
+          transition-all
+          duration-300
         "
+
+        style={{
+          background: "var(--navbar)",
+          borderColor: "var(--border)",
+          boxShadow: "0 10px 25px var(--shadow)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+        }}
       >
-
-
         {/* Logo */}
-
         <Link
           to="/"
+
           className="
             flex
             items-center
@@ -52,7 +48,6 @@ export default function Header() {
             group
           "
         >
-
           <img
             src={logo}
             alt="logo"
@@ -75,7 +70,6 @@ export default function Header() {
             "
           />
 
-
           <h1
             className="
               text-lg
@@ -83,28 +77,29 @@ export default function Header() {
               md:text-3xl
 
               font-bold
-
+              font-manga
               bg-gradient-to-r
-              from-pink-500
-              via-fuchsia-500
-              to-violet-500
 
               bg-clip-text
               text-transparent
+
+              transition-all
+              duration-300
             "
+
+            style={{
+              backgroundImage: `linear-gradient(
+                  90deg,
+                  var(--gradient-start),
+                  var(--gradient-middle),
+                  var(--gradient-end)
+                )`,
+            }}
           >
             MangaVerse
           </h1>
-
-
         </Link>
-
-
-
-
-
         {/* Banner */}
-
         <div
           className="
             hidden
@@ -117,7 +112,6 @@ export default function Header() {
             px-10
           "
         >
-
           <img
             src={anime}
             alt="banner"
@@ -131,22 +125,20 @@ export default function Header() {
               object-cover
 
               border
-              border-white
 
               shadow-md
+
+              transition-all
+              duration-300
             "
+
+            style={{
+              borderColor: "var(--border)",
+              boxShadow: "0 8px 20px var(--shadow)",
+            }}
           />
-
         </div>
-
-
-
-
-
-
-
-        {/* Navigation */}
-
+        <ThemeToggle /> {/* Navigation */}
         <nav
           className="
             flex
@@ -158,9 +150,6 @@ export default function Header() {
             md:gap-3
           "
         >
-
-
-
           {/* Discover */}
 
           <Link
@@ -181,17 +170,23 @@ export default function Header() {
 
               rounded-xl
 
-              text-pink-700
-
-              hover:bg-pink-100
-
               transition-all
               duration-300
             "
+
+            style={{
+              color: "var(--primary)",
+            }}
+
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "var(--surface-hover)")
+            }
+
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
-
-            <Compass size={20}/>
-
+            <Compass size={20} />
 
             <span
               className="
@@ -203,15 +198,7 @@ export default function Header() {
             >
               Discover
             </span>
-
-
           </Link>
-
-
-
-
-
-
 
           {/* Library */}
 
@@ -233,17 +220,23 @@ export default function Header() {
 
               rounded-xl
 
-              text-pink-700
-
-              hover:bg-pink-100
-
               transition-all
               duration-300
             "
+
+            style={{
+              color: "var(--primary)",
+            }}
+
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "var(--surface-hover)")
+            }
+
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
-
-            <BookOpen size={20}/>
-
+            <BookOpen size={20} />
 
             <span
               className="
@@ -255,15 +248,7 @@ export default function Header() {
             >
               My Library
             </span>
-
-
           </Link>
-
-
-
-
-
-
 
           {/* Login */}
 
@@ -282,11 +267,6 @@ export default function Header() {
 
               rounded-full
 
-              bg-gradient-to-r
-              from-pink-400
-              via-fuchsia-400
-              to-violet-400
-
               px-2
               sm:px-3
               md:px-5
@@ -298,16 +278,18 @@ export default function Header() {
               font-semibold
 
               shadow-lg
-              shadow-pink-300/40
 
               hover:scale-105
 
               transition-all
               duration-300
             "
+
+            style={{
+              background: "var(--button-bg)",
+              boxShadow: "0 10px 25px var(--shadow)",
+            }}
           >
-
-
             <div
               className="
                 rounded-full
@@ -317,12 +299,8 @@ export default function Header() {
                 p-1.5
               "
             >
-
-              <UserRound size={18}/>
-
+              <UserRound size={18} />
             </div>
-
-
 
             <span
               className="
@@ -332,34 +310,26 @@ export default function Header() {
             >
               Sign In
             </span>
-
-
           </Link>
-
-
         </nav>
-
-
       </header>
-
-
-
-
 
       {/* Gradient line */}
 
       <div
         className="
           h-1
-
-          bg-gradient-to-r
-
-          from-pink-300
-          via-fuchsia-300
-          to-sky-300
         "
-      />
 
+        style={{
+          background: `linear-gradient(
+            90deg,
+            var(--gradient-start),
+            var(--gradient-middle),
+            var(--gradient-end)
+          )`,
+        }}
+      />
     </>
   );
 }

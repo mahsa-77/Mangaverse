@@ -1,15 +1,8 @@
-import {
-  Smile,
-  LibraryBig,
-  Sparkles
-} from "lucide-react";
+import { Smile, LibraryBig, Sparkles } from "lucide-react";
 
 export default function FeatureCards({ setMode }) {
-
   return (
-
     <section className="mt-14 px-6">
-
       <div
         className="
           max-w-6xl
@@ -22,7 +15,6 @@ export default function FeatureCards({ setMode }) {
           sm:gap-8
         "
       >
-
         {/* Mood */}
 
         <button
@@ -34,12 +26,13 @@ export default function FeatureCards({ setMode }) {
 
             rounded-3xl
 
-            bg-white/25
+            bg-(--surface)
+            opacity-90
 
             backdrop-blur-xl
 
             border
-            border-white/40
+            border-(--border)
 
             shadow-xl
 
@@ -54,11 +47,11 @@ export default function FeatureCards({ setMode }) {
             duration-300
           "
         >
-
           <Smile
             size={42}
             className="
-              text-pink-500
+              text-(--primary)
+
               mb-5
 
               group-hover:rotate-12
@@ -73,7 +66,7 @@ export default function FeatureCards({ setMode }) {
 
               font-bold
 
-              text-purple-700
+              text-(--heading)
             "
           >
             Describe Your Mood
@@ -83,16 +76,14 @@ export default function FeatureCards({ setMode }) {
             className="
               mt-3
 
-              text-gray-700
+              text-(--text)
 
               leading-7
             "
           >
-            Tell AI how you're feeling
-            and get manga recommendations
-            based on your mood.
+            Tell AI how you're feeling and get manga recommendations based on
+            your mood.
           </p>
-
         </button>
 
         {/* Library */}
@@ -106,12 +97,13 @@ export default function FeatureCards({ setMode }) {
 
             rounded-3xl
 
-            bg-white/25
+            bg-(--surface)
+            opacity-90
 
             backdrop-blur-xl
 
             border
-            border-white/40
+            border-(--border)
 
             shadow-xl
 
@@ -126,11 +118,10 @@ export default function FeatureCards({ setMode }) {
             duration-300
           "
         >
-
           <LibraryBig
             size={42}
             className="
-              text-violet-500
+              text-(--heading)
 
               mb-5
 
@@ -146,7 +137,7 @@ export default function FeatureCards({ setMode }) {
 
               font-bold
 
-              text-purple-700
+              text-(--heading)
             "
           >
             Discover My Library
@@ -156,16 +147,13 @@ export default function FeatureCards({ setMode }) {
             className="
               mt-3
 
-              text-gray-700
+              text-(--text)
 
               leading-7
             "
           >
-            Let AI analyze your
-            reading history and
-            recommend your next manga.
+            Let AI analyze your reading history and recommend your next manga.
           </p>
-
         </button>
 
         {/* Surprise */}
@@ -179,12 +167,13 @@ export default function FeatureCards({ setMode }) {
 
             rounded-3xl
 
-            bg-white/25
+            bg-(--surface)
+            opacity-90
 
             backdrop-blur-xl
 
             border
-            border-white/40
+            border-(--border)
 
             shadow-xl
 
@@ -199,11 +188,10 @@ export default function FeatureCards({ setMode }) {
             duration-300
           "
         >
-
           <Sparkles
             size={42}
             className="
-              text-fuchsia-500
+              text-(--accent)
 
               mb-5
 
@@ -219,7 +207,7 @@ export default function FeatureCards({ setMode }) {
 
               font-bold
 
-              text-purple-700
+              text-(--heading)
             "
           >
             Surprise Me
@@ -229,22 +217,16 @@ export default function FeatureCards({ setMode }) {
             className="
               mt-3
 
-              text-gray-700
+              text-(--text)
 
               leading-7
             "
           >
-            Don't know what to read?
-            Let AI surprise you with
-            a hidden masterpiece.
+            Don't know what to read? Let AI surprise you with a hidden
+            masterpiece.
           </p>
-
         </button>
-
       </div>
-
     </section>
-
   );
-
 }

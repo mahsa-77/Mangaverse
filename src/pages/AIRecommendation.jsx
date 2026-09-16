@@ -1,25 +1,20 @@
 import { useState } from "react";
 import AIHeader from "../Components/AI/AIHeader";
 import FeatureCards from "../Components/AI/FeatureCards";
-import aiBackground from "../assets/ai.png";
+import aiBackground from "../assets/aibg.jpeg";
 import ResultSection from "../Components/AI/ResultSection";
 
-
 export default function AIRecommendation() {
-
   const [mode, setMode] = useState("");
 
-
   return (
-
     <main
       className="
         min-h-screen
       "
     >
-
       {/* AI Background Area */}
-      <div
+       <div
         className="
           relative
           min-h-screen
@@ -29,21 +24,18 @@ export default function AIRecommendation() {
         "
 
         style={{
-          backgroundImage: `url(${aiBackground})`
+          backgroundImage: `url(${aiBackground})`,
         }}
       >
-
-
         {/* Glass Overlay */}
         <div
           className="
             absolute
             inset-0
-            bg-white/10
+            bg-(--bg)/50
             backdrop-blur-[1px]
           "
         />
-
 
         {/* Content */}
         <div
@@ -54,27 +46,13 @@ export default function AIRecommendation() {
             pb-20
           "
         >
-
           <AIHeader />
 
+          <FeatureCards setMode={setMode} />
 
-          <FeatureCards
-            setMode={setMode}
-          />
-
-          <ResultSection 
-            mode={mode}
-          />
-
-
+          <ResultSection mode={mode} />
         </div>
-
-
       </div>
-
-
     </main>
-
   );
-
 }

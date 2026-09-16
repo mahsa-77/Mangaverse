@@ -1,51 +1,195 @@
-import bg from "../assets/wallhaven-nkvw97.jpg";
+import bg from "../assets/signin.jpg";
 import { Link } from "react-router-dom";
 
 export default function Login() {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      {/* پس‌زمینه */}
+    <div
+      className="
+        relative
+        min-h-screen
+        overflow-hidden
+        flex
+        items-center
+        justify-center
+      "
+    >
+      {/* Background */}
+
       <img
         src={bg}
-        className="absolute inset-0 w-full h-full object-cover blur-[2px] scale-105"
+        className="
+          absolute
+          inset-0
+          w-full
+          h-full
+          object-cover
+          blur-[3px]
+          scale-105
+        "
         alt="login background"
       />
 
+      {/* Theme Overlay */}
 
-      {/* فرم لاگین */}
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="bg-white/80 rounded-3xl shadow-2xl px-8 py-10 max-w-md w-full text-center">
-          <h2 className="text-pink-600 text-3xl font-semibold mb-6">
-            Welcome Back! 💗
-          </h2>
+      <div
+        className="
+          absolute
+          inset-0
+          bg-(--bg)
+          opacity-60
+        "
+      />
 
-          <form className="flex flex-col gap-4">
-            <input
-              type="email"
-              placeholder="Enter your Email"
-              className="p-3 rounded-xl border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
-            />
-            <input
-              type="password"
-              placeholder="Enter your Password"
-              className="p-3 rounded-xl border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
-            />
+      {/* Login Card */}
 
-            <button
-              type="submit"
-              className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-xl transition-all"
-            >
-              Sign in
-            </button>
-          </form>
+      <div
+        className="
+          relative
+          z-10
 
-          <p className="text-gray-600 text-sm mt-4">
-            Dont have an account?{" "}
-            <Link to="/Register" className="text-pink-600 font-medium">
-            Log in
-            </Link>
-          </p>
-        </div>
+          w-full
+          max-w-md
+
+          mx-4
+
+          p-8
+
+          rounded-3xl
+
+          bg-(--surface)
+
+          border
+          border-(--border)
+
+          shadow-2xl
+        "
+      >
+        <h2
+          className="
+            text-3xl
+            font-bold
+            text-center
+            mb-6
+
+            text-(--heading)
+          "
+        >
+          Welcome Back! ✨
+        </h2>
+
+        <form
+          className="
+            flex
+            flex-col
+            gap-4
+          "
+        >
+          <input
+            type="email"
+            placeholder="Enter your Email"
+            className="
+              p-3
+
+              rounded-xl
+
+              bg-(--input-bg)
+
+              border
+              border-(--input-border)
+
+              text-(--text)
+
+              placeholder:text-(--text-muted)
+
+              focus:outline-none
+
+              focus:ring-2
+
+              focus:ring-(--primary)
+            "
+          />
+
+          <input
+            type="password"
+            placeholder="Enter your Password"
+            className="
+              p-3
+
+              rounded-xl
+
+              bg-(--input-bg)
+
+              border
+              border-(--input-border)
+
+              text-(--text)
+
+              placeholder:text-(--text-muted)
+
+              focus:outline-none
+
+              focus:ring-2
+
+              focus:ring-(--primary)
+            "
+          />
+
+          <button
+            type="submit"
+            className="
+              mt-2
+
+              py-3
+
+              rounded-xl
+
+              bg-(--primary)
+
+              text-white
+
+              font-semibold
+
+              shadow-lg
+
+              hover:bg-(--primary-hover)
+
+              hover:scale-105
+
+              transition-all
+
+              duration-300
+            "
+          >
+            Sign in
+          </button>
+        </form>
+
+        <p
+          className="
+            mt-5
+
+            text-sm
+
+            text-center
+
+            text-(--text-muted)
+          "
+        >
+          Don't have an account?{" "}
+
+          <Link
+            to="/Register"
+            className="
+              font-semibold
+              text-(--primary)
+              hover:text-(--primary-hover)
+              transition
+              hover:underline
+            "
+          >
+            Create account
+          </Link>
+        </p>
       </div>
     </div>
   );

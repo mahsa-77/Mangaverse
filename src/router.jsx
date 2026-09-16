@@ -38,7 +38,6 @@ function Home() {
       <SearchBox />
       <FilterBox />
       <Trendings />
-      
     </>
   );
 }
@@ -84,7 +83,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/ai",
-        element: <AIRecommendation />
+        element: <AIRecommendation />,
       },
     ],
   },

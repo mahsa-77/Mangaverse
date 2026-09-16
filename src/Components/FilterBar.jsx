@@ -1,101 +1,55 @@
 import { useSearchParams } from "react-router-dom";
 
-
 export default function FilterBox() {
-
   const [searchParams, setSearchParams] = useSearchParams();
 
-
-  const active =
-    searchParams.get("filter") || "completed";
-
-
+  const active = searchParams.get("filter") || "completed";
 
   const handleClick = (filter) => {
-
     setSearchParams((prev) => {
-
       const params = new URLSearchParams(prev);
 
       params.set("filter", filter);
 
       return params;
-
     });
-
   };
 
-
-
-
-  const base =
-    `
-    px-3
+  const base = `
+    px-4
     sm:px-5
 
-    py-2
+    py-2.5
 
     rounded-full
 
     text-xs
     sm:text-sm
 
-    font-semibold
+    font-medium
 
     border
 
     transition-all
-
     duration-300
 
-    ease-out
-    `;
+    cursor-pointer
 
+    select-none
+  `;
 
+  const normal = `
+    hover:-translate-y-[1px]
+  `;
 
-  const normal =
-    `
-    bg-white
+  const activeBtn = `
+    shadow-sm
 
-    text-pink-600
-
-    border-purple-200
-
-    hover:bg-pink-50
-
-    hover:scale-105
-
-    hover:shadow-md
-    `;
-
-
-
-  const activeBtn =
-    `
-    bg-gradient-to-r
-
-    from-pink-400
-
-    via-fuchsia-400
-
-    to-violet-400
-
-    text-white
-
-    border-pink-300
-
-    shadow-md
-
-    scale-105
-    `;
-
-
-
+    hover:-translate-y-[1px]
+  `;
 
   return (
-
     <div
-
       className="
         w-fit
 
@@ -118,100 +72,104 @@ export default function FilterBox() {
 
         mb-4
 
-        bg-purple-50
-
-        border-2
-
-        border-purple-200
-
         p-2
-        sm:p-3
 
-        rounded-3xl
+        rounded-full
 
-        shadow-lg
+        transition-all
+        duration-300
       "
 
+      style={{
+        background: "rgba(255,255,255,.55)",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+
+        border: "1px solid var(--border)",
+
+        boxShadow: "0 2px 8px rgba(15,23,42,.04)",
+      }}
     >
-
-
       <button
-
-        onClick={() =>
-          handleClick("completed")
-        }
+        onClick={() => handleClick("completed")}
 
         className={`
           ${base}
 
-          ${
-            active === "completed"
-              ? activeBtn
-              : normal
-          }
+          ${active === "completed" ? activeBtn : normal}
         `}
 
+        style={
+          active === "completed"
+            ? {
+                background: "var(--primary-hover)",
+                color: "#fff",
+                borderColor: "transparent",
+                boxShadow: "0 2px 8px rgba(15,23,42,.08)",
+              }
+            : {
+                background: "transparent",
+                color: "var(--primary)",
+                borderColor: "transparent",
+              }
+        }
       >
-
         Completed
-
       </button>
 
-
-
-
       <button
-
-        onClick={() =>
-          handleClick("popular")
-        }
+        onClick={() => handleClick("popular")}
 
         className={`
           ${base}
 
-          ${
-            active === "popular"
-              ? activeBtn
-              : normal
-          }
+          ${active === "popular" ? activeBtn : normal}
         `}
 
+        style={
+          active === "popular"
+            ? {
+                background: "var(--primary-hover)",
+                color: "#fff",
+                borderColor: "transparent",
+                boxShadow: "0 2px 8px rgba(15,23,42,.08)",
+              }
+            : {
+                background: "transparent",
+                color: "var(--primary)",
+                borderColor: "transparent",
+              }
+        }
       >
-
         Popular
-
       </button>
 
-
-
-
-
       <button
-
-        onClick={() =>
-          handleClick("oneshot")
-        }
+        onClick={() => handleClick("oneshot")}
 
         className={`
           ${base}
 
-          ${
-            active === "oneshot"
-              ? activeBtn
-              : normal
-          }
+          ${active === "oneshot" ? activeBtn : normal}
         `}
 
+        style={
+          active === "oneshot"
+            ? {
+                background: "var(--primary-hover)",
+                color: "#fff",
+                borderColor: "transparent",
+                boxShadow: "0 2px 8px rgba(15,23,42,.08)",
+              }
+            : {
+                background: "transparent",
+                color: "var(--primary)",
+                borderColor: "transparent",
+              }
+        }
       >
-
         One-shot
-
       </button>
-
-
-
     </div>
-
   );
-
 }

@@ -12,6 +12,7 @@ export default function AIHeader() {
         px-6
       "
     >
+      {/* Title */}
 
       <h1
         className="
@@ -21,9 +22,9 @@ export default function AIHeader() {
           font-bold
 
           bg-linear-to-r
-          from-pink-500
-          via-purple-500
-          to-blue-500
+          from-(--gradient-start)
+          via-(--gradient-middle)
+          to-(--gradient-end)
 
           bg-clip-text
           text-transparent
@@ -32,6 +33,7 @@ export default function AIHeader() {
         ✨ MangaVerse AI
       </h1>
 
+      {/* Description */}
 
       <p
         className="
@@ -39,7 +41,7 @@ export default function AIHeader() {
 
           max-w-xl
 
-          text-gray-700
+          text-(--text-muted)
 
           text-lg
 
@@ -51,6 +53,8 @@ export default function AIHeader() {
         Discover stories that match your mood and taste.
       </p>
 
+      {/* AI Badge */}
+
       <div
         className="
           mt-5
@@ -60,20 +64,28 @@ export default function AIHeader() {
 
           rounded-full
 
-          bg-white/30
+          bg-(--surface)
 
           backdrop-blur-md
 
           border
-          border-white/40
+          border-(--border)
 
           text-sm
-          text-purple-700
+          font-semibold
+
+          text-(--heading)
+
+          shadow-[0_4px_14px_var(--shadow)]
+
+          transition-all
+          duration-300
+
+          hover:-translate-y-1
         "
       >
         ✨ Let AI find your next adventure
       </div>
-
     </section>
   );
 }

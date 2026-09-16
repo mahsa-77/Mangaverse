@@ -1,216 +1,139 @@
 import axios from "axios";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { Star } from "lucide-react";
-import ApiError from "./Common/ApiError.jsx"
-
+import ApiError from "./Common/ApiError.jsx";
 
 /* ---------------- LOADER ---------------- */
 
 export async function searchLoader({ request }) {
-
   const url = new URL(request.url);
 
   const query = url.searchParams.get("q");
 
-
   if (!query) {
-
     return {
       results: [],
       query: "",
       error: false,
     };
-
   }
 
-
   try {
-
-    const res = await axios.get(
-      "https://api.jikan.moe/v4/manga",
-      {
-        params: {
-          q: query,
-        },
-      }
-    );
-
+    const res = await axios.get("https://api.jikan.moe/v4/manga", {
+      params: {
+        q: query,
+      },
+    });
 
     return {
-
       results: res.data.data,
 
       query,
 
       error: false,
-
     };
-
-
   } catch (err) {
-
     console.log(err);
 
-
     return {
-
       results: [],
 
       query,
 
       error: true,
-
     };
-
   }
-
 }
-
-
 
 /* ---------------- PAGE ---------------- */
 
-
 export default function Search() {
-
-
-  const {
-    results,
-    query,
-    error
-  } = useLoaderData();
-
+  const { results, query, error } = useLoaderData();
 
   const [searchParams] = useSearchParams();
 
-
-
   return (
-
     <section
       className="
         m-4
         sm:m-6
         md:m-8
-
         p-4
         sm:p-6
-
-        bg-slate-100
-
-        rounded-md
+        bg-(--surface-hover)
+        border
+        border-(--border)
+        rounded-3xl
+        shadow-[0_4px_18px_var(--shadow)]
       "
     >
-
-
-
       {/* Header */}
-
 
       <div
         className="
           mb-5
         "
       >
-
         <h2
           className="
             text-2xl
             font-bold
-            text-purple-700
+            text-(--heading)
           "
         >
           Search Results
         </h2>
 
-
-
         <p
           className="
             text-sm
-            text-gray-600
+            text-(--text-muted)
             mt-1
           "
         >
-
           Results for:{" "}
-
-
           <span
             className="
               font-semibold
-              text-purple-600
+              text-(--primary)
             "
           >
             {query || searchParams.get("q")}
           </span>
-
-
         </p>
-
-
       </div>
-
-
-
-
-
 
       {/* API ERROR */}
 
+      {error && (
+        <ApiError
+          title="Manga service unavailable"
 
-      {
-        error && (
+          message="Unable to load search results."
 
-          <ApiError
-
-            title="Manga service unavailable"
-
-            message="Unable to load search results."
-
-            description="
+          description="
               Jikan API is currently unavailable.
               Please try again later.
             "
-
-          />
-
-        )
-      }
-
-
-
-
-
-
+        />
+      )}
 
       {/* RESULTS */}
 
+      {!error && results.length === 0 ? (
+        <ApiError
+          title="No manga found"
 
-      {
-        !error && results.length === 0 ? (
+          message="We couldn't find any manga."
 
-
-          <ApiError
-
-            title="No manga found"
-
-            message="We couldn't find any manga."
-
-            description="
+          description="
               Try searching with another title.
             "
-
-          />
-
-
-        ) : (
-
-
-          !error && (
-
-            <div
-              className="
+        />
+      ) : (
+        !error && (
+          <div
+            className="
                 grid
 
                 grid-cols-2
@@ -225,38 +148,20 @@ export default function Search() {
 
                 gap-5
               "
-            >
+          >
+            {results.map((item) => {
+              const author =
+                item.authors?.length > 0 ? item.authors[0].name : "Unknown";
 
+              return (
+                <Link
+                  to={`/manga/${item.mal_id}`}
 
-              {
-                results.map((item)=>{
-
-
-                  const author =
-                    item.authors?.length > 0
-
-                    ? item.authors[0].name
-
-                    : "Unknown";
-
-
-
-                  return (
-
-
-                    <Link
-
-                      to={`/manga/${item.mal_id}`}
-
-                      key={item.mal_id}
-
-                    >
-
-
-                      <div
-
-                        className="
-                          bg-white
+                  key={item.mal_id}
+                >
+                  <div
+                    className="
+                          bg-(--card)
 
                           p-3
 
@@ -274,20 +179,13 @@ export default function Search() {
 
                           cursor-pointer
                         "
+                  >
+                    <img
+                      src={item.images.jpg.image_url}
 
-                      >
+                      alt={item.title}
 
-
-                        <img
-
-                          src={
-                            item.images.jpg.image_url
-                          }
-
-                          alt={item.title}
-
-
-                          className="
+                      className="
                             rounded-md
 
                             w-full
@@ -296,53 +194,36 @@ export default function Search() {
 
                             object-cover
                           "
+                    />
 
-                        />
-
-
-
-                        <h4
-
-                          className="
+                    <h4
+                      className="
                             mt-2
 
                             text-sm
 
                             font-bold
 
-                            text-purple-800
+                            text-(--heading)
                           "
+                    >
+                      {item.title}
+                    </h4>
 
-                        >
-
-                          {item.title}
-
-                        </h4>
-
-
-
-                        <p
-
-                          className="
+                    <p
+                      className="
                             text-xs
 
-                            text-gray-600
+                            text-(--text-muted)
 
                             mt-1
                           "
+                    >
+                      ✍️ {author}
+                    </p>
 
-                        >
-
-                          ✍️ {author}
-
-                        </p>
-
-
-
-
-                        <div
-
-                          className="
+                    <div
+                      className="
                             flex
 
                             items-center
@@ -353,54 +234,25 @@ export default function Search() {
 
                             mt-1
                           "
-
-                        >
-
-                          ⭐
-
-
-                          <span
-
-                            className="
+                    >
+                      ⭐
+                      <span
+                        className="
                               ml-1
 
-                              text-gray-700
+                              text-(--text)
                             "
-
-                          >
-
-                            {item.score || "N/A"}
-
-                          </span>
-
-
-                        </div>
-
-
-                      </div>
-
-
-                    </Link>
-
-
-                  );
-
-
-                })
-              }
-
-
-            </div>
-
-          )
-
+                      >
+                        {item.score || "N/A"}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         )
-
-      }
-
-
+      )}
     </section>
-
   );
-
 }

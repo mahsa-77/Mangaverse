@@ -4,13 +4,12 @@ import { useNavigate } from "react-router-dom";
 export default function ApiError({
   title = "Oops...",
   message = "The manga universe is taking a short break.",
-  description = "Jikan API is temporarily unavailable. Please try again in a few moments."
+  description = "Jikan API is temporarily unavailable. Please try again in a few moments.",
 }) {
   const navigate = useNavigate();
 
   return (
     <div className="flex items-center justify-center py-16 px-6">
-
       <div
         className="
           w-full
@@ -32,9 +31,7 @@ export default function ApiError({
           text-center
         "
       >
-
         <div className="flex justify-center mb-6">
-
           <div
             className="
               w-20
@@ -49,28 +46,17 @@ export default function ApiError({
               justify-center
             "
           >
-            <CloudOff
-              size={40}
-              className="text-pink-500"
-            />
+            <CloudOff size={40} className="text-pink-500" />
           </div>
-
         </div>
 
-        <h2 className="text-3xl font-bold text-purple-700">
-          {title}
-        </h2>
+        <h2 className="text-3xl font-bold text-purple-700">{title}</h2>
 
-        <p className="mt-4 text-lg text-gray-700">
-          {message}
-        </p>
+        <p className="mt-4 text-lg text-gray-700">{message}</p>
 
-        <p className="mt-2 text-sm text-gray-500 leading-6">
-          {description}
-        </p>
+        <p className="mt-2 text-sm text-gray-500 leading-6">{description}</p>
 
         <div className="flex justify-center gap-4 mt-8">
-
           <button
             onClick={() => window.location.reload()}
             className="
@@ -131,11 +117,8 @@ export default function ApiError({
             <House size={18} />
             Back Home
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 }

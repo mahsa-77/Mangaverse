@@ -1,83 +1,49 @@
 import { Link } from "react-router-dom";
 
-
 export default function Footer() {
-
   return (
-
     <footer
       className="
         relative
         mt-20
         overflow-hidden
-
-        bg-gradient-to-br
-        from-pink-100
-        via-purple-100
-        to-fuchsia-100
-
         border-t
-        border-pink-200
+        border-(--footer-border)
       "
+      style={{
+        background: "var(--footer-bg)",
+      }}
     >
-
-      {/* Background */}
-      <div
-        className="
-          absolute
-          inset-0
-
-          bg-[url('/src/assets/cloud-2.jpg')]
-          bg-cover
-          bg-center
-
-          opacity-20
-        "
-      />
-
-
       <div
         className="
           relative
-
           max-w-7xl
           mx-auto
-
           px-6
           md:px-10
-
           py-12
         "
       >
-
         <div
           className="
             grid
-
             grid-cols-1
             md:grid-cols-3
-
             gap-10
-
             items-start
           "
         >
-
-
           {/* Brand */}
 
           <div>
-
             <h2
               className="
                 text-2xl
                 font-bold
-
                 bg-gradient-to-r
-                from-pink-500
-                via-fuchsia-500
-                to-violet-500
-
+                from-(--gradient-start)
+                via-(--gradient-middle)
+                to-(--gradient-end)
                 bg-clip-text
                 text-transparent
               "
@@ -85,29 +51,20 @@ export default function Footer() {
               MangaVerse
             </h2>
 
-
             <p
               className="
                 mt-4
-
-                text-gray-600
-
+                text-(--text-muted)
                 text-sm
-
                 leading-7
               "
             >
-              Discover manga stories,<br />
+              Discover manga stories,
+              <br />
               explore new worlds and <br />
-              keep track of your reading
-              journey.
+              keep track of your reading journey.
             </p>
-
           </div>
-
-
-
-
 
           {/* AI */}
 
@@ -116,34 +73,26 @@ export default function Footer() {
               md:text-center
             "
           >
-
             <h3
               className="
                 font-bold
-
-                text-purple-800
-
+                text-(--heading)
                 mb-4
               "
             >
               MangaVerse AI
             </h3>
 
-
             <p
               className="
                 text-sm
-
-                text-gray-600
-
+                text-(--text-muted)
                 leading-7
               "
             >
-              Let AI help you discover
-              manga based on your mood
-              and reading taste.
+              Let AI help you discover manga based on your mood and reading
+              taste.
             </p>
-
 
             <Link
               to="/ai"
@@ -152,41 +101,23 @@ export default function Footer() {
                 inline-flex
                 items-center
                 justify-center
-
                 mt-5
-
                 px-5
                 py-2
-
                 rounded-full
-
-                bg-gradient-to-r
-                from-pink-400
-                via-fuchsia-400
-                to-violet-400
-
-                text-white
-
                 font-semibold
-
-                shadow-lg
-
-                hover:scale-105
-
+                shadow-[0_8px_20px_rgba(0,0,0,.12)]
+                hover:scale-110
                 transition
               "
+              style={{
+                background: "var(--ai-button)",
+                color: "var(--ai-text)",
+              }}
             >
               Try AI Picks ✨
             </Link>
-
-
           </div>
-
-
-
-
-
-
 
           {/* Explore */}
 
@@ -195,147 +126,97 @@ export default function Footer() {
               md:text-right
             "
           >
-
             <h3
               className="
                 font-bold
-
-                text-purple-800
-
+                text-(--heading)
                 mb-4
               "
             >
               Explore
             </h3>
 
-
             <ul
               className="
                 space-y-3
-
-                text-gray-600
-
+                text-(--text-muted)
                 text-sm
               "
             >
-
               <li>
-
                 <Link
                   to="/"
 
                   className="
-                    hover:text-pink-600
+                    hover:text-(--primary)
                     transition
                   "
                 >
                   Home
                 </Link>
-
               </li>
 
-
               <li>
-
                 <Link
                   to="/"
 
                   className="
-                    hover:text-pink-600
+                    hover:text-(--primary)
                     transition
                   "
                 >
                   Trending
                 </Link>
-
               </li>
 
-
               <li>
-
                 <Link
                   to="/search"
 
                   className="
-                    hover:text-pink-600
+                    hover:text-(--primary)
                     transition
                   "
                 >
                   Search
                 </Link>
-
               </li>
 
-
               <li>
-
                 <Link
                   to="/library"
 
                   className="
-                    hover:text-pink-600
+                    hover:text-(--primary)
                     transition
                   "
                 >
                   My Library
                 </Link>
-
               </li>
-
-
             </ul>
-
-
           </div>
-
-
         </div>
-
-
-
-
-
 
         {/* Bottom */}
 
         <div
           className="
             mt-10
-
             pt-6
-
             border-t
-
-            border-pink-200
-
-
+            border-(--footer-border)
             flex
-
             flex-col
             md:flex-row
-
-
             justify-between
-
             items-center
-
-
             gap-4
-
-
             text-sm
-
-            text-gray-500
+            text-(--text-muted)
           "
         >
-
-
-          <p>
-            © 2026 MangaVerse.
-            All rights reserved.
-          </p>
-
-
+          <p>© 2026 MangaVerse. All rights reserved.</p>
 
           <div
             className="
@@ -345,7 +226,6 @@ export default function Footer() {
               text-xl
             "
           >
-
             <a
               href="#"
 
@@ -356,7 +236,6 @@ export default function Footer() {
             >
               🌐
             </a>
-
 
             <a
               href="#"
@@ -369,7 +248,6 @@ export default function Footer() {
               📷
             </a>
 
-
             <a
               href="#"
 
@@ -380,19 +258,9 @@ export default function Footer() {
             >
               🐦
             </a>
-
-
           </div>
-
-
         </div>
-
-
       </div>
-
-
     </footer>
-
   );
-
 }

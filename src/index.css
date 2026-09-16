@@ -1,14 +1,252 @@
 @import "tailwindcss";
 
+/* ==========================================================
+   🌸 SHOUJO THEME
+========================================================== */
+
+:root,
+[data-theme="shoujo"] {
+  /* Backgrounds */
+
+  --bg: #fff7f2;
+
+  --surface: #ffffff;
+
+  --surface-hover: #fdf0f3;
+
+  --card: #ffffff;
+
+  --card-hover: #fad6dc;
+
+  /* Text */
+
+  --text: #4a3038;
+
+  --text-muted: #8a5a68;
+
+  /* Brand */
+
+  --primary: #f09aaa;
+
+  --primary-hover: #d94f70;
+
+  --secondary: #8f4f9e;
+
+  --accent: #fad6dc;
+
+  /* Buttons */
+
+  --button-bg: linear-gradient(90deg, #f09aaa, #d94f70, #8f4f9e);
+
+  --button-hover: linear-gradient(90deg, #e87892, #b9365a, #743b82);
+
+  --button-text: #ffffff;
+
+  /* AI Button */
+
+  --ai-button: linear-gradient(135deg, #f2afbc, #c94b6e, #8f4f9e);
+
+  --ai-text: #f8edeb;
+
+  --ai-title: #c42f5b;
+
+  --ai-subtitle: #743b82;
+
+  /* Inputs */
+
+  --input-bg: #ffffff;
+
+  --input-border: #f09aaa;
+
+  /* Navbar */
+
+  --navbar: rgba(255, 255, 255, 0.75);
+
+  /* Border */
+
+  --border: rgba(143, 79, 158, 0.15);
+
+  /* Shadow */
+
+  --shadow: rgba(74, 48, 56, 0.08);
+
+  /* Logo Gradient */
+
+  --gradient-start: #f09aaa;
+
+  --gradient-middle: #d94f70;
+
+  --gradient-end: #8f4f9e;
+
+  --heading: #8f4f9e;
+
+  /* Footer */
+
+  --footer-bg: linear-gradient(
+    135deg,
+    #fff7f2 0%,
+    #fad6dc 45%,
+    #e8d2b8 80%,
+    #8f4f9e 130%
+  );
+
+  --footer-text: #7a4a5a;
+
+  --footer-border: rgba(143, 79, 158, 0.12);
+
+  /* Accent Colors */
+
+  --sage: #a8b89a;
+
+  --progress-bg: #e7d3e6;
+}
+
+/* ==========================================================
+   ⚔️ SHOUNEN THEME
+========================================================== */
+
+[data-theme="shounen"] {
+  /* Backgrounds */
+
+  --bg: #0f1f2f;
+
+  --surface: #20354a;
+
+  --surface-hover: #1e3957;
+
+  --card: #223a52;
+
+  --card-hover: #203e5c;
+
+  /* Text */
+
+  --text: #f5f3ee;
+
+  --text-muted: #b7c2cf;
+
+  /* Brand */
+
+  --primary: #caa45d;
+
+  --primary-hover: #b8872e;
+
+  --secondary: #1e3957;
+
+  --accent: #e0c27a;
+
+  /* Buttons */
+
+  --button-bg: linear-gradient(90deg, #caa45d, #b8872e, #874e4c);
+
+  --button-hover: linear-gradient(90deg, #e0c27a, #caa45d, #9a6a24);
+
+  --button-text: #0f1f2f;
+
+  /* ai button */
+
+  --ai-button: linear-gradient(135deg, #38bdf8, #2563eb, #f59e0b);
+
+  --ai-title: #f3c969;
+
+  --ai-subtitle: #7fc7f2;
+
+  /* Inputs */
+
+  --input-bg: #162c43;
+
+  --input-border: rgba(202, 164, 93, 0.35);
+
+  /* Navbar */
+
+  --navbar: rgba(15, 31, 47, 0.78);
+
+  /* Border */
+
+  --border: rgba(202, 164, 93, 0.18);
+
+  /* Shadow */
+
+  --shadow: rgba(0, 0, 0, 0.22);
+
+  /* Logo Gradient */
+
+  --gradient-start: #e0c27a;
+
+  --gradient-middle: #caa45d;
+
+  --gradient-end: #b8872e;
+
+  --heading: #e0c27a;
+
+  /* Footer */
+
+  --footer-bg: #1c344b;
+
+  --footer-text: #e5d7b5;
+
+  --footer-border: rgba(202, 164, 93, 0.15);
+
+  /* Accent */
+
+  --sage: #7fa98b;
+
+  --progress-bg: #dbeafe;
+}
+
+/* ==========================================================
+   GLOBAL
+========================================================== */
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
 body {
-  font-family: "Quicksand", sans-serif;
-  background: "#fff7fb";
-  color: "#5b4b63";
-  * {
-  transition: all 0.2s ease;
-  }
-  ::selection {
-  background: #f9a8d4;
+  margin: 0;
+
+  font-family: "Nunito", sans-serif;
+
+  background: var(--bg);
+
+  color: var(--text);
+}
+
+* {
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.25s ease;
+}
+
+/*
+a {
+
+  color: inherit;
+
+  text-decoration: none;
+
+}
+  */
+
+button {
+  cursor: pointer;
+
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--primary);
+
   color: white;
 }
+
+.font-manga {
+  font-family: "Philosopher", sans-serif;
+  letter-spacing: 0.05em;
 }

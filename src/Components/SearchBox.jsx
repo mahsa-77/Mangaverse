@@ -3,95 +3,54 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, Star } from "lucide-react";
 
-
 export default function SearchBox() {
-
   const navigate = useNavigate();
-
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
-
-
   async function handleSearch(text) {
-
     try {
-
       if (!text.trim()) {
         setResults([]);
         return;
       }
 
+      const res = await axios.get("https://api.jikan.moe/v4/manga", {
+        params: {
+          q: text,
+          limit: 5,
+        },
+      });
 
-      const res = await axios.get(
-        "https://api.jikan.moe/v4/manga",
-        {
-          params: {
-            q: text,
-            limit: 5,
-          },
-        }
-      );
-
-
-      setResults(
-        res.data.data.slice(0, 5)
-      );
-
-
+      setResults(res.data.data.slice(0, 5));
     } catch (err) {
-
       console.log(err);
 
       setResults([]);
-
     }
-
   }
 
-
-
-
-
   const clearSearch = () => {
-
     setQuery("");
 
     setResults([]);
 
     setShowSuggestions(false);
-
   };
 
-
-
-
-
   const handleSubmit = (e) => {
-
     e.preventDefault();
-
 
     if (!query.trim()) return;
 
-
-    navigate(
-      `/search?q=${encodeURIComponent(query)}`
-    );
-
+    navigate(`/search?q=${encodeURIComponent(query)}`);
 
     setShowSuggestions(false);
-
   };
 
-
-
-
-
   return (
-
     <section
       className="
         mx-4
@@ -103,50 +62,38 @@ export default function SearchBox() {
 
         rounded-3xl
 
-        bg-gradient-to-br
-        from-pink-50
-        via-white
-        to-purple-50
-
         border
-        border-pink-100
-
-        shadow-lg
-        shadow-pink-100/40
 
         p-5
         sm:p-8
         md:p-10
 
         relative
+
+        transition-all
       "
+
+      style={{
+        background:
+          "linear-gradient(135deg,var(--surface),var(--surface-hover))",
+
+        borderColor: "var(--border)",
+
+        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+      }}
     >
-
-
-      {/* Overlay */}
-
-      {
-        showSuggestions && (
-
-          <div
-            className="
+      {showSuggestions && (
+        <div
+          className="
               fixed
               inset-0
 
               z-20
             "
 
-            onClick={() =>
-              setShowSuggestions(false)
-            }
-          />
-
-        )
-      }
-
-
-
-
+          onClick={() => setShowSuggestions(false)}
+        />
+      )}
 
       <div
         className="
@@ -158,9 +105,6 @@ export default function SearchBox() {
           text-center
         "
       >
-
-
-
         <h1
           className="
             text-3xl
@@ -170,35 +114,37 @@ export default function SearchBox() {
             font-bold
 
             leading-tight
-
-            text-purple-900
           "
+
+          style={{
+            color: "var(--heading)",
+          }}
         >
-
           Discover Your Next
-
           <br />
-
           <span
             className="
               bg-gradient-to-r
-              from-pink-500
-              via-fuchsia-500
-              to-violet-500
 
               bg-clip-text
 
               text-transparent
             "
+
+            style={{
+              backgroundImage: `
+              linear-gradient(
+              90deg,
+              var(--gradient-start),
+              var(--gradient-middle),
+              var(--gradient-end)
+              )
+              `,
+            }}
           >
             Manga Story ✨
           </span>
-
         </h1>
-
-
-
-
 
         <p
           className="
@@ -208,23 +154,19 @@ export default function SearchBox() {
             sm:text-base
             md:text-lg
 
-            text-purple-500
-
             max-w-2xl
 
             leading-7
             md:leading-8
           "
+
+          style={{
+            color: "var(--text-muted)",
+          }}
         >
-          Explore thousands of beautiful manga,
-          discover new stories and keep track
-          of your reading journey.
+          Explore thousands of beautiful manga, discover new stories and keep
+          track of your reading journey.
         </p>
-
-
-
-
-
 
         {/* SEARCH */}
 
@@ -243,8 +185,6 @@ export default function SearchBox() {
             z-30
           "
         >
-
-
           <div
             className="
               flex
@@ -257,9 +197,7 @@ export default function SearchBox() {
 
               border
 
-              border-pink-200
-
-              bg-white/80
+              bg-white/50
 
               backdrop-blur-xl
 
@@ -269,47 +207,38 @@ export default function SearchBox() {
               py-3
               sm:py-4
 
-              shadow-lg
-
               focus-within:ring-2
-
-              focus-within:ring-pink-300
             "
+
+            style={{
+              borderColor: "var(--border)",
+
+              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+            }}
           >
-
-
             <Search
-              className="text-pink-400 shrink-0"
               size={22}
+
+              className="shrink-0"
+
+              style={{
+                color: "var(--primary)",
+              }}
             />
-
-
-
             <input
-
               type="text"
 
               value={query}
 
+              onFocus={() => setShowSuggestions(true)}
 
-              onFocus={() =>
-                setShowSuggestions(true)
-              }
-
-
-              onChange={(e)=>{
-
+              onChange={(e) => {
                 setQuery(e.target.value);
 
-                handleSearch(
-                  e.target.value
-                );
-
+                handleSearch(e.target.value);
               }}
 
-
               placeholder="Search your favorite manga..."
-
 
               className="
                 flex-1
@@ -319,67 +248,39 @@ export default function SearchBox() {
                 bg-transparent
 
                 outline-none
-
-                text-purple-800
-
-                placeholder:text-purple-300
               "
 
-            />
+              style={{
+                color: "var(--text)",
+              }}
+            />{" "}
+            {query && (
+              <button
+                type="button"
 
+                onClick={clearSearch}
+              >
+                <X
+                  size={20}
 
+                  style={{
+                    color: "var(--text-muted)",
+                  }}
 
-
-            {
-              query && (
-
-                <button
-
-                  type="button"
-
-                  onClick={clearSearch}
-
-                >
-
-                  <X
-
-                    size={20}
-
-                    className="
-                      text-gray-400
-
-                      hover:text-pink-500
-
+                  className="
                       transition
+                      hover:scale-110
                     "
-
-                  />
-
-                </button>
-
-              )
-            }
-
-
+                />
+              </button>
+            )}
           </div>
-
-
-
-
-
-
-
 
           {/* Suggestions */}
 
-
-          {
-            showSuggestions &&
-            results.length > 0 && (
-
-              <div
-
-                className="
+          {showSuggestions && results.length > 0 && (
+            <div
+              className="
                   absolute
 
                   left-0
@@ -394,43 +295,30 @@ export default function SearchBox() {
 
                   border
 
-                  border-pink-200
-
-                  bg-white/95
-
                   backdrop-blur-xl
-
-                  shadow-xl
 
                   overflow-hidden
 
                   z-50
                 "
 
-              >
+              style={{
+                background: "var(--surface)",
+                borderColor: "var(--border)",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.05)",
+              }}
+            >
+              {results.map((item) => (
+                <div
+                  key={item.mal_id}
 
+                  onClick={() => {
+                    setShowSuggestions(false);
 
-                {
-                  results.map((item)=>(
+                    navigate(`/manga/${item.mal_id}`);
+                  }}
 
-
-                    <div
-
-                      key={item.mal_id}
-
-
-                      onClick={()=>{
-
-                        setShowSuggestions(false);
-
-                        navigate(
-                          `/manga/${item.mal_id}`
-                        );
-
-                      }}
-
-
-                      className="
+                  className="
                         flex
 
                         items-center
@@ -441,27 +329,25 @@ export default function SearchBox() {
                         p-3
                         sm:p-4
 
-                        hover:bg-pink-50
-
                         transition
 
                         cursor-pointer
                       "
 
-                    >
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "var(--surface-hover)";
+                  }}
 
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                  }}
+                >
+                  <img
+                    src={item.images.jpg.image_url}
 
+                    alt={item.title}
 
-                      <img
-
-                        src={
-                          item.images.jpg.image_url
-                        }
-
-                        alt={item.title}
-
-
-                        className="
+                    className="
                           w-12
                           h-16
 
@@ -476,43 +362,33 @@ export default function SearchBox() {
 
                           shrink-0
                         "
+                  />
 
-                      />
-
-
-
-
-                      <div
-                        className="
+                  <div
+                    className="
                           flex-1
 
                           text-left
 
                           min-w-0
                         "
-                      >
-
-                        <h3
-
-                          className="
+                  >
+                    <h3
+                      className="
                             font-semibold
-
-                            text-purple-900
 
                             truncate
                           "
 
-                        >
+                      style={{
+                        color: "var(--text)",
+                      }}
+                    >
+                      {item.title}
+                    </h3>
 
-                          {item.title}
-
-                        </h3>
-
-
-
-                        <div
-
-                          className="
+                    <div
+                      className="
                             mt-1
 
                             flex
@@ -520,62 +396,30 @@ export default function SearchBox() {
                             items-center
 
                             gap-1
-
-                            text-pink-500
                           "
 
-                        >
+                      style={{
+                        color: "var(--primary)",
+                      }}
+                    >
+                      <Star size={15} fill="currentColor" />
 
-                          <Star
-                            size={15}
-                            fill="currentColor"
-                          />
-
-
-                          <span
-                            className="
+                      <span
+                        className="
                               text-sm
                               font-medium
                             "
-                          >
-
-                            {
-                              item.score ?? "N/A"
-                            }
-
-                          </span>
-
-
-                        </div>
-
-
-                      </div>
-
-
+                      >
+                        {item.score ?? "N/A"}
+                      </span>
                     </div>
-
-
-                  ))
-                }
-
-
-              </div>
-
-            )
-          }
-
-
-
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </form>
-
-
-
       </div>
-
-
-
     </section>
-
   );
-
 }
