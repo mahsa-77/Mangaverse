@@ -1,7 +1,7 @@
-import axios from "axios";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { Star } from "lucide-react";
 import ApiError from "./Common/ApiError.jsx";
+import { searchManga } from "../Context/apiOfProgram.js";
 
 /* ---------------- LOADER ---------------- */
 
@@ -19,14 +19,10 @@ export async function searchLoader({ request }) {
   }
 
   try {
-    const res = await axios.get("https://api.jikan.moe/v4/manga", {
-      params: {
-        q: query,
-      },
-    });
+    const results = await searchManga(query);
 
     return {
-      results: res.data.data,
+      results,
 
       query,
 
@@ -155,9 +151,9 @@ export default function Search() {
 
               return (
                 <Link
-                  to={`/manga/${item.mal_id}`}
+                  to={`/manga/${item.id}`}
 
-                  key={item.mal_id}
+                  key={item.id}
                 >
                   <div
                     className="
@@ -181,7 +177,7 @@ export default function Search() {
                         "
                   >
                     <img
-                      src={item.images.jpg.image_url}
+                      src={item.image}
 
                       alt={item.title}
 

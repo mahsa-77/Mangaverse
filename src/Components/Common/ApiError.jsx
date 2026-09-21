@@ -14,20 +14,14 @@ export default function ApiError({
         className="
           w-full
           max-w-xl
-
           rounded-3xl
-
           border
           border-pink-200
-
           bg-white/40
           backdrop-blur-xl
-
           shadow-xl
           shadow-pink-200/30
-
           p-10
-
           text-center
         "
       >
@@ -36,11 +30,8 @@ export default function ApiError({
             className="
               w-20
               h-20
-
               rounded-full
-
               bg-pink-100
-
               flex
               items-center
               justify-center
@@ -56,31 +47,24 @@ export default function ApiError({
 
         <p className="mt-2 text-sm text-gray-500 leading-6">{description}</p>
 
-        <div className="flex justify-center gap-4 mt-8">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
           <button
             onClick={() => window.location.reload()}
             className="
               flex
               items-center
               gap-2
-
               px-5
               py-3
-
               rounded-2xl
-
               bg-white/60
               backdrop-blur-md
-
               border
               border-pink-200
-
               hover:bg-white
               hover:-translate-y-1
-
               transition-all
               duration-300
-
               shadow-md
             "
           >
@@ -94,23 +78,16 @@ export default function ApiError({
               flex
               items-center
               gap-2
-
               px-5
               py-3
-
               rounded-2xl
-
               bg-linear-to-r
               from-pink-400
               to-fuchsia-500
-
               text-white
-
               hover:scale-105
-
               transition-all
               duration-300
-
               shadow-lg
             "
           >

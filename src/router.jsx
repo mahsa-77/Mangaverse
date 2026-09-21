@@ -1,7 +1,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 import Header from "./Components/Header.jsx";
-import Footer from "./Components/footer.jsx";
+import Footer from "./Components/Footer.jsx";
 
 import SearchBox from "./Components/SearchBox.jsx";
 import FilterBox from "./Components/FilterBar.jsx";
@@ -10,7 +10,7 @@ import FloatingAIButton from "./Components/FloatingAIButton.jsx";
 import AIRecommendation from "./pages/AIRecommendation.jsx";
 
 import MangaDetail, { mangaLoader } from "./pages/MangaDetail.jsx";
-import Library, { libraryLoader } from "./pages/Library.jsx";
+import Library, { libraryLoader } from "./pages/library.jsx";
 import Login from "./pages/login.jsx";
 import Register from "./pages/Register.jsx";
 

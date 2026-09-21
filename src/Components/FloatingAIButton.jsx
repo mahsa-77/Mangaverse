@@ -16,7 +16,7 @@ export default function FloatingAIButton() {
         fixed
         bottom-8
         left-8
-        z-9999
+        z-[999]
         group
         flex
         items-center

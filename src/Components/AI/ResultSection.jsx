@@ -4,18 +4,15 @@ import {
   Smile,
   LoaderCircle,
 } from "lucide-react";
-
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-
 import RecommendationCards from "./RecommendationCards";
-
 import {
   findMangaByTitles,
   getLibraryRecommendations,
   getMoodRecommendations,
   getRandomManga,
-} from "../../servisces/ai";
+} from "../../services/ai.js"
 
 export default function ResultSection({ mode }) {
   const [prompt, setPrompt] = useState("");
@@ -118,7 +115,7 @@ export default function ResultSection({ mode }) {
       const savedIds = library
         .map((item) => {
           return Number(
-            item.id || item.mal_id
+            item.id
           );
         })
         .filter((id) => {
@@ -141,9 +138,9 @@ export default function ResultSection({ mode }) {
               .toLowerCase();
 
           const alreadySavedById =
-            item.mal_id &&
+            item.id &&
             savedIds.includes(
-              Number(item.mal_id)
+              Number(item.id)
             );
 
           const alreadySavedByTitle =
@@ -250,11 +247,8 @@ export default function ResultSection({ mode }) {
 
       className="
         max-w-5xl
-
         mx-auto
-
         mt-10
-
         px-4
         sm:px-6
       "
@@ -265,16 +259,11 @@ export default function ResultSection({ mode }) {
       <div
         className="
           rounded-3xl
-
           bg-(--surface)
-
           backdrop-blur-xl
-
           border
           border-(--border)
-
           shadow-[0_8px_30px_var(--shadow)]
-
           p-5
           sm:p-8
         "
@@ -290,9 +279,7 @@ export default function ResultSection({ mode }) {
               className="
                 flex
                 items-center
-
                 gap-3
-
                 mb-6
               "
             >
@@ -308,9 +295,7 @@ export default function ResultSection({ mode }) {
               <h2
                 className="
                   text-2xl
-
                   font-bold
-
                   text-(--heading)
                 "
               >
@@ -323,7 +308,6 @@ export default function ResultSection({ mode }) {
             <p
               className="
                 text-(--text)
-
                 mb-5
               "
             >
@@ -351,29 +335,18 @@ export default function ResultSection({ mode }) {
 
               className="
                 w-full
-
                 h-36
-
                 rounded-2xl
-
                 border
                 border-(--input-border)
-
                 bg-(--input-bg)
-
                 text-(--text)
-
                 placeholder:text-(--text-muted)
-
                 p-4
-
                 resize-none
-
                 outline-none
-
                 focus:ring-2
                 focus:ring-(--primary)
-
                 transition-all
               "
             />
@@ -388,23 +361,14 @@ export default function ResultSection({ mode }) {
 
               className="
                 mt-6
-
                 px-8
-
                 py-3
-
                 rounded-full
-
                 font-semibold
-
                 shadow-lg
-
                 hover:scale-105
-
                 transition-all
-
                 duration-300
-
                 disabled:opacity-60
                 disabled:cursor-not-allowed
               "
@@ -433,9 +397,7 @@ export default function ResultSection({ mode }) {
               className="
                 flex
                 items-center
-
                 gap-3
-
                 mb-6
               "
             >
@@ -451,9 +413,7 @@ export default function ResultSection({ mode }) {
               <h2
                 className="
                   text-2xl
-
                   font-bold
-
                   text-(--heading)
                 "
               >
@@ -466,7 +426,6 @@ export default function ResultSection({ mode }) {
             <p
               className="
                 text-(--text)
-
                 mb-6
               "
             >
@@ -485,21 +444,13 @@ export default function ResultSection({ mode }) {
 
               className="
                 px-8
-
                 py-3
-
                 rounded-full
-
                 font-semibold
-
                 shadow-lg
-
                 hover:scale-105
-
                 transition-all
-
                 duration-300
-
                 disabled:opacity-60
                 disabled:cursor-not-allowed
               "
@@ -528,9 +479,7 @@ export default function ResultSection({ mode }) {
               className="
                 flex
                 items-center
-
                 gap-3
-
                 mb-6
               "
             >
@@ -546,9 +495,7 @@ export default function ResultSection({ mode }) {
               <h2
                 className="
                   text-2xl
-
                   font-bold
-
                   text-(--heading)
                 "
               >
@@ -561,7 +508,6 @@ export default function ResultSection({ mode }) {
             <p
               className="
                 text-(--text)
-
                 mb-6
               "
             >
@@ -579,21 +525,13 @@ export default function ResultSection({ mode }) {
 
               className="
                 px-8
-
                 py-3
-
                 rounded-full
-
                 font-semibold
-
                 shadow-lg
-
                 hover:scale-105
-
                 transition-all
-
                 duration-300
-
                 disabled:opacity-60
                 disabled:cursor-not-allowed
               "
@@ -619,15 +557,10 @@ export default function ResultSection({ mode }) {
           <div
             className="
               flex
-
               items-center
-
               gap-3
-
               mt-8
-
               text-(--primary)
-
               font-semibold
             "
           >
@@ -654,9 +587,7 @@ export default function ResultSection({ mode }) {
           <p
             className="
               mt-8
-
               text-(--heading)
-
               font-semibold
             "
           >
@@ -681,17 +612,11 @@ export default function ResultSection({ mode }) {
                 <p
                   className="
                     mt-8
-
                     mb-4
-
                     rounded-xl
-
                     p-4
-
                     text-sm
-
                     font-medium
-
                     border
                   "
 

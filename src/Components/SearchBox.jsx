@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X, Star } from "lucide-react";
+import { searchManga } from "../Context/apiOfProgram";
 
 export default function SearchBox() {
   const navigate = useNavigate();
@@ -17,20 +17,22 @@ export default function SearchBox() {
         return;
       }
 
-      const res = await axios.get("https://api.jikan.moe/v4/manga", {
-        params: {
-          q: text,
-          limit: 5,
-        },
-      });
-
-      setResults(res.data.data.slice(0, 5));
+      const results = await searchManga(text, 5);
+      setResults(results);
     } catch (err) {
       console.log(err);
 
       setResults([]);
     }
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch(query);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [query]);
 
   const clearSearch = () => {
     setQuery("");
@@ -56,20 +58,14 @@ export default function SearchBox() {
         mx-4
         sm:mx-6
         md:mx-8
-
         mt-8
         md:mt-10
-
         rounded-3xl
-
         border
-
         p-5
         sm:p-8
         md:p-10
-
         relative
-
         transition-all
       "
 
@@ -87,7 +83,6 @@ export default function SearchBox() {
           className="
               fixed
               inset-0
-
               z-20
             "
 
@@ -99,9 +94,7 @@ export default function SearchBox() {
         className="
           flex
           flex-col
-
           items-center
-
           text-center
         "
       >
@@ -110,9 +103,7 @@ export default function SearchBox() {
             text-3xl
             sm:text-4xl
             md:text-6xl
-
             font-bold
-
             leading-tight
           "
 
@@ -125,9 +116,7 @@ export default function SearchBox() {
           <span
             className="
               bg-gradient-to-r
-
               bg-clip-text
-
               text-transparent
             "
 
@@ -149,13 +138,10 @@ export default function SearchBox() {
         <p
           className="
             mt-5
-
             text-sm
             sm:text-base
             md:text-lg
-
             max-w-2xl
-
             leading-7
             md:leading-8
           "
@@ -175,38 +161,25 @@ export default function SearchBox() {
 
           className="
             relative
-
             mt-8
-
             w-full
-
             max-w-2xl
-
             z-30
           "
         >
           <div
             className="
               flex
-
               items-center
-
               gap-3
-
               rounded-2xl
-
               border
-
               bg-white/50
-
               backdrop-blur-xl
-
               px-4
               sm:px-5
-
               py-3
               sm:py-4
-
               focus-within:ring-2
             "
 
@@ -234,19 +207,14 @@ export default function SearchBox() {
 
               onChange={(e) => {
                 setQuery(e.target.value);
-
-                handleSearch(e.target.value);
               }}
 
               placeholder="Search your favorite manga..."
 
               className="
                 flex-1
-
                 min-w-0
-
                 bg-transparent
-
                 outline-none
               "
 
@@ -282,23 +250,14 @@ export default function SearchBox() {
             <div
               className="
                   absolute
-
                   left-0
-
                   right-0
-
                   top-full
-
                   mt-3
-
                   rounded-2xl
-
                   border
-
                   backdrop-blur-xl
-
                   overflow-hidden
-
                   z-50
                 "
 
@@ -310,27 +269,22 @@ export default function SearchBox() {
             >
               {results.map((item) => (
                 <div
-                  key={item.mal_id}
+                  key={item.id}
 
                   onClick={() => {
                     setShowSuggestions(false);
 
-                    navigate(`/manga/${item.mal_id}`);
+                    navigate(`/manga/${item.id}`);
                   }}
 
                   className="
                         flex
-
                         items-center
-
                         gap-3
                         sm:gap-4
-
                         p-3
                         sm:p-4
-
                         transition
-
                         cursor-pointer
                       "
 
@@ -343,23 +297,18 @@ export default function SearchBox() {
                   }}
                 >
                   <img
-                    src={item.images.jpg.image_url}
+                    src={item.image}
 
                     alt={item.title}
 
                     className="
                           w-12
                           h-16
-
                           sm:w-14
                           sm:h-20
-
                           rounded-xl
-
                           object-cover
-
                           shadow
-
                           shrink-0
                         "
                   />
@@ -367,16 +316,13 @@ export default function SearchBox() {
                   <div
                     className="
                           flex-1
-
                           text-left
-
                           min-w-0
                         "
                   >
                     <h3
                       className="
                             font-semibold
-
                             truncate
                           "
 
@@ -390,11 +336,8 @@ export default function SearchBox() {
                     <div
                       className="
                             mt-1
-
                             flex
-
                             items-center
-
                             gap-1
                           "
 

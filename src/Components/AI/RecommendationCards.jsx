@@ -31,11 +31,11 @@ export default function RecommendationCards({ mangas }) {
   }, []);
 
   const toggleLibrary = (manga) => {
-    if (!manga.mal_id) {
+    if (!manga.id) {
       return;
     }
 
-    const bookId = manga.mal_id;
+    const bookId = manga.id;
 
     const library =
       JSON.parse(localStorage.getItem("library")) || [];
@@ -57,9 +57,9 @@ export default function RecommendationCards({ mangas }) {
         title: manga.title,
 
         image:
-          manga.images?.jpg?.large_image_url,
+          manga.image,
 
-        rating: manga.score || 0,
+        rating: 0,
 
         notes: [],
 
@@ -125,14 +125,14 @@ export default function RecommendationCards({ mangas }) {
 
           const isAdded =
             addedBooks.includes(
-              manga.mal_id
+              manga.id
             );
 
           return (
 
             <div
               key={
-                manga.mal_id ||
+                manga.id ||
                 manga.title
               }
 
@@ -160,8 +160,7 @@ export default function RecommendationCards({ mangas }) {
 
               <img
                 src={
-                  manga.images?.jpg
-                    ?.large_image_url
+                  manga.image
                 }
 
                 alt={manga.title}
@@ -351,14 +350,14 @@ export default function RecommendationCards({ mangas }) {
 
                   <Link
                     to={
-                      manga.mal_id
-                        ? `/manga/${manga.mal_id}`
+                      manga.id
+                        ? `/manga/${manga.id}`
                         : "#"
                     }
 
                     onClick={(e) => {
 
-                      if (!manga.mal_id) {
+                      if (!manga.id) {
                         e.preventDefault();
                       }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
+import { searchMangaByTitle } from "../Context/apiOfProgram";
 
 const SERVER_URL = "http://localhost:3001";
-const JIKAN_URL = "https://api.jikan.moe/v4";
 
 /* ================= DELAY ================= */
 
@@ -13,24 +13,18 @@ function delay(milliseconds) {
 
 /* ================= FALLBACK MANGA ================= */
 
-function createFallbackManga(title, index = 0, reason = "Recommended by AI") {
+function createFallbackManga(
+  title,
+  index = 0,
+  reason = "Recommended by AI"
+) {
   return {
-    mal_id: null,
-
+    id: null,
     fallback_id: `fallback-${title}-${index}`,
-
     title,
-
     reason,
-
     score: null,
-
-    images: {
-      jpg: {
-        large_image_url: null,
-      },
-    },
-
+    image: null,
     isFallback: true,
   };
 }
@@ -63,40 +57,6 @@ export async function getLibraryRecommendations(library) {
   return response.data.recommendations || [];
 }
 
-/* ================= SEARCH ONE TITLE ================= */
-
-async function searchMangaByTitle(title) {
-  try {
-    const response = await axios.get(`${JIKAN_URL}/manga`, {
-      params: {
-        q: title,
-        limit: 1,
-      },
-
-      timeout: 12000,
-    });
-
-    const manga = response.data.data?.[0];
-
-    if (!manga) {
-      return null;
-    }
-
-    return {
-      ...manga,
-      isFallback: false,
-    };
-  } catch (error) {
-    const status = error.response?.status;
-
-    console.error(
-      `Jikan search failed for "${title}".`,
-      `Status: ${status || "No response"}`,
-    );
-
-    return null;
-  }
-}
 
 /* ================= SEARCH TITLES ================= */
 

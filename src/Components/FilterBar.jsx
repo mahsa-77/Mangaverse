@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 
 export default function FilterBox() {
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const active = searchParams.get("filter") || "completed";

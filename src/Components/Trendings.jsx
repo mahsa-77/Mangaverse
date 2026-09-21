@@ -1,31 +1,12 @@
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
-import axios from "axios";
+import {
+  Link,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import Ticon from "../assets/magic.png";
 import ApiError from "./Common/ApiError";
-
-/* ================= JIKAN REQUEST ================= */
-
-async function getJikanData(apiUrl, retries = 2) {
-  try {
-    const res = await axios.get(apiUrl, {
-      timeout: 15000,
-    });
-
-    return res.data;
-  } catch (error) {
-    console.log("Jikan request failed:", error.message);
-
-    if (retries > 0) {
-      console.log(`Retrying... ${retries} attempt(s) left`);
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      return getJikanData(apiUrl, retries - 1);
-    }
-
-    throw error;
-  }
-}
+import { getTrendingManga } from "../Context/apiOfProgram";
 
 /* ================= LOADER ================= */
 
@@ -36,27 +17,15 @@ export async function trendingLoader({ request }) {
 
   const page = url.searchParams.get("page") || "1";
 
-  let apiUrl = "";
-
-  if (filter === "completed") {
-    apiUrl = `https://api.jikan.moe/v4/manga?status=complete&page=${page}&limit=20`;
-  } else if (filter === "popular") {
-    apiUrl = `https://api.jikan.moe/v4/manga?order_by=popularity&page=${page}&limit=20`;
-  } else if (filter === "oneshot") {
-    apiUrl = `https://api.jikan.moe/v4/manga?type=oneshot&page=${page}&limit=20`;
-  }
-
   try {
-    const data = await getJikanData(apiUrl);
-
-    let manga = data.data || [];
+    const { manga, totalPages } = await getTrendingManga(filter, page);
 
     return {
       manga,
 
       page: Number(page),
 
-      totalPages: data.pagination?.last_visible_page || 1,
+      totalPages,
 
       filter,
 
@@ -85,6 +54,9 @@ export default function Trendings() {
   const navigate = useNavigate();
 
   const { manga, page, totalPages, filter, error } = useLoaderData();
+
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
 
   const changePage = (newPage) => {
     navigate(`/?filter=${filter}&page=${newPage}`);
@@ -161,7 +133,13 @@ export default function Trendings() {
         />
       )}
 
-      {!error && manga.length > 0 && (
+      {isLoading && (
+        <div className="text-center py-10 text-(--heading) font-semibold">
+          Loading...
+        </div>
+      )}
+
+      {!isLoading && !error && manga.length > 0 && (
         <>
           {/* Grid */}
 
@@ -177,18 +155,12 @@ export default function Trendings() {
           >
             {manga.map((item) => {
               const author =
-                item.authors?.length > 0
-                  ? item.authors[0].name
-                  : "Unknown";
+                item.authors?.length > 0 ? item.authors[0].name : "Unknown";
 
-              const readers =
-                item.members || item.favorites || 0;
+              const readers = item.members || item.favorites || 0;
 
               return (
-                <Link
-                  to={`/manga/${item.mal_id}`}
-                  key={item.mal_id}
-                >
+                <Link to={`/manga/${item.id}`} key={item.id}>
                   <div
                     className="
                       bg-(--card)
@@ -206,7 +178,7 @@ export default function Trendings() {
                     "
                   >
                     <img
-                      src={item.images?.jpg?.image_url}
+                      src={item.image}
                       alt={item.title}
                       className="
                         rounded-lg
@@ -249,7 +221,6 @@ export default function Trendings() {
                       "
                     >
                       ⭐
-
                       <span
                         className="
                           ml-1
@@ -267,8 +238,7 @@ export default function Trendings() {
                         mt-2
                       "
                     >
-                      👁️ Readers:{" "}
-                      {readers.toLocaleString()}
+                      👁️ Readers: {readers.toLocaleString()}
                     </p>
                   </div>
                 </Link>

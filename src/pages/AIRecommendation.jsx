@@ -42,7 +42,6 @@ export default function AIRecommendation() {
           className="
             relative
             z-10
-
             pb-20
           "
         >

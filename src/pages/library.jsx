@@ -118,7 +118,6 @@ export default function Library() {
           <p
             className="
                 mt-2
-
                 text-gray-500
               "
           >
@@ -236,7 +235,7 @@ export default function Library() {
                       >
                         <span
                           className="
-                                  wrap-break-word
+                                  break-words
                                   flex-1
                                 "
                         >
@@ -252,13 +251,9 @@ export default function Library() {
 
                           className="
                                   text-red-400
-
                                   text-xs
-
                                   hover:text-red-600
-
                                   transition
-
                                   shrink-0
                                 "
                         >
@@ -282,9 +277,7 @@ export default function Library() {
                 <h3
                   className="
                       text-sm
-
                       font-semibold
-
                       text-(--heading)
                     "
                 >

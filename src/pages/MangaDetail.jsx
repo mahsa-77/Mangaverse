@@ -1,10 +1,11 @@
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Sparkles } from "lucide-react";
 import ApiError from "../Components/Common/ApiError";
-import { Sparkles, Languages } from "lucide-react";
+import { getMangaById } from "../Context/apiOfProgram";
 
-/* ================= SYNC ================= */
+/* ================= SYNC LIBRARY ================= */
 
 const syncLibrary = (data) => {
   localStorage.setItem("library", JSON.stringify(data));
@@ -15,14 +16,14 @@ const syncLibrary = (data) => {
 
 export async function mangaLoader({ params }) {
   try {
-    const res = await axios.get(`https://api.jikan.moe/v4/manga/${params.id}`);
+    const manga = await getMangaById(params.id);
 
     return {
-      manga: res.data.data,
+      manga,
       error: false,
     };
   } catch (error) {
-    console.error("Manga Loader Error:", error);
+    console.error(error);
 
     return {
       manga: null,
@@ -38,37 +39,44 @@ export default function MangaDetail() {
 
   const navigate = useNavigate();
 
-  const id = manga?.mal_id;
+  const id = manga?.id;
+
+  /* ================= STATES ================= */
 
   const [rating, setRating] = useState(0);
+
   const [note, setNote] = useState("");
+
   const [noteSaved, setNoteSaved] = useState(false);
+
   const [saved, setSaved] = useState(false);
+
   const [completed, setCompleted] = useState(false);
 
   const [translatedSynopsis, setTranslatedSynopsis] = useState("");
+
   const [translating, setTranslating] = useState(false);
+
   const [showTranslation, setShowTranslation] = useState(false);
 
-  /* ================= LOAD FROM LIBRARY ================= */
+  /* ================= LOAD LIBRARY ================= */
 
   useEffect(() => {
     if (!id) return;
 
     const library = JSON.parse(localStorage.getItem("library")) || [];
 
-    const item = library.find((i) => i.id === id);
+    const item = library.find((item) => item.id === id);
 
     if (item) {
       setSaved(true);
-
       setRating(item.rating || 0);
-
       setNote(item.note || "");
-
       setCompleted(item.completed || false);
     }
   }, [id]);
+
+  /* ================= ERROR ================= */
 
   if (error) {
     return <ApiError />;
@@ -78,15 +86,15 @@ export default function MangaDetail() {
     return <p className="text-center mt-10">Loading...</p>;
   }
 
-  /* ================= SAVE / REMOVE ================= */
+  /* ================= SAVE ================= */
 
   const saveToLibrary = () => {
     const library = JSON.parse(localStorage.getItem("library")) || [];
 
-    const exists = library.find((i) => i.id === id);
+    const exists = library.find((item) => item.id === id);
 
     if (exists) {
-      const updated = library.filter((i) => i.id !== id);
+      const updated = library.filter((item) => item.id !== id);
 
       syncLibrary(updated);
 
@@ -97,19 +105,12 @@ export default function MangaDetail() {
 
     library.push({
       id,
-
       title: manga.title,
-
-      image: manga.images.jpg.image_url,
-
+      image: manga.thumbnail,
       rating,
-
       note,
-
       notes: [],
-
       progress: 0,
-
       completed: false,
     });
 
@@ -118,12 +119,12 @@ export default function MangaDetail() {
     setSaved(true);
   };
 
-  /* ================= COMPLETED ================= */
+  /* ================= COMPLETE ================= */
 
   const toggleCompleted = () => {
     const library = JSON.parse(localStorage.getItem("library")) || [];
 
-    const item = library.find((i) => i.id === id);
+    const item = library.find((item) => item.id === id);
 
     if (item) {
       item.completed = !item.completed;
@@ -143,21 +144,19 @@ export default function MangaDetail() {
 
     const library = JSON.parse(localStorage.getItem("library")) || [];
 
-    const item = library.find((i) => i.id === id);
+    const item = library.find((item) => item.id === id);
 
     if (item) {
       item.rating = star;
 
       syncLibrary(library);
     }
-  };
-
-  /* ================= NOTES ================= */
+  }; /* ================= NOTES ================= */
 
   const saveNote = () => {
     const library = JSON.parse(localStorage.getItem("library")) || [];
 
-    const item = library.find((i) => i.id === id);
+    const item = library.find((item) => item.id === id);
 
     if (item) {
       if (!item.notes) {
@@ -167,7 +166,6 @@ export default function MangaDetail() {
       if (note.trim()) {
         item.notes.push({
           text: note,
-
           createdAt: Date.now(),
         });
       }
@@ -199,8 +197,8 @@ export default function MangaDetail() {
       setTranslatedSynopsis(res.data.translated);
 
       setShowTranslation(true);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
 
       alert("Translation failed.");
     } finally {
@@ -208,47 +206,43 @@ export default function MangaDetail() {
     }
   };
 
+  /* ================= UI ================= */
+
   return (
     <section
       className="
+        min-h-screen
+        bg-(--bg)
+        text-(--text)
         max-w-6xl
         mx-auto
-
         p-4
         sm:p-6
       "
     >
+      {/* BACK */}
+
       <button
         onClick={() => navigate(-1)}
-
         className="
           mb-6
-
-          text-pink-600
-
           font-semibold
+          text-(--primary)
+          hover:text-(--primary-hover)
         "
       >
         ← Back
       </button>
 
+      {/* MAIN CARD */}
+
       <div
         className="
           rounded-3xl
-
           border
-          border-pink-200
-
-          bg-gradient-to-br
-
-          from-pink-50
-
-          via-white
-
-          to-violet-50
-
+          border-(--border)
+          bg-(--card)
           shadow-2xl
-
           p-4
           sm:p-6
         "
@@ -256,67 +250,57 @@ export default function MangaDetail() {
         <div
           className="
             flex
-
             flex-col
-
             md:flex-row
-
             gap-8
           "
         >
-          {/* IMAGE */}
+          {/* IMAGE + BUTTONS */}
 
           <div
             className="
               flex
-
               flex-col
-
               items-center
-
               w-full
               md:w-auto
             "
           >
             <img
-              src={manga.images.jpg.large_image_url}
-
+              src={manga.image}
               alt={manga.title}
-
               className="
                 w-48
                 sm:w-64
-
                 h-72
                 sm:h-96
-
                 object-cover
-
                 rounded-2xl
+                shadow-lg
               "
             />
 
             <div
               className="
                 flex
-
                 flex-wrap
-
                 justify-center
-
                 gap-3
-
                 mt-4
               "
             >
               <button
                 onClick={saveToLibrary}
-
-                className={`px-4 py-2 rounded-xl transition hover:scale-105 ${
-                  saved
-                    ? "bg-red-300 text-white hover:bg-red-400"
-                    : "bg-pink-200 text-pink-800 hover:bg-pink-300"
-                }`}
+                className="
+                  px-4
+                  py-2
+                  rounded-xl
+                  bg-(--accent)
+                  text-(--text)
+                  border
+                  border-(--border)
+                  hover:scale-105
+                "
               >
                 {saved ? "Remove" : "Save Library"}
               </button>
@@ -325,18 +309,11 @@ export default function MangaDetail() {
                 className="
                   px-5
                   py-2
-
                   rounded-xl
-
-                  bg-emerald-300
-
+                  bg-(--sage)
                   text-white
-
                   font-bold
-
                   hover:scale-105
-
-                  transition
                 "
               >
                 Start Reading
@@ -344,40 +321,37 @@ export default function MangaDetail() {
 
               <button
                 onClick={toggleCompleted}
-
-                className={`px-4 py-2 rounded-xl text-white transition hover:scale-105 ${
-                  completed ? "bg-emerald-700" : "bg-green-300"
-                }`}
+                className="
+                  px-4
+                  py-2
+                  rounded-xl
+                  text-white
+                  hover:scale-105
+                "
+                style={{
+                  background: completed
+                    ? "var(--primary-hover)"
+                    : "var(--primary)",
+                }}
               >
                 {completed ? "Completed ✓" : "Complete"}
               </button>
             </div>
           </div>
 
-          {/* INFO */}
+          {/* INFORMATION */}
 
-          <div
-            className="
-              flex-1
-            "
-          >
+          <div className="flex-1">
             <h1
               className="
                 text-3xl
                 sm:text-4xl
-
                 font-bold
-
                 bg-gradient-to-r
-
-                from-pink-600
-
-                via-fuchsia-600
-
-                to-violet-600
-
+                from-(--gradient-start)
+                via-(--gradient-middle)
+                to-(--gradient-end)
                 bg-clip-text
-
                 text-transparent
               "
             >
@@ -387,79 +361,94 @@ export default function MangaDetail() {
             <div
               className="
                 flex
-
                 flex-wrap
-
                 gap-2
-
                 mt-4
               "
             >
-              {manga.genres?.map((g) => (
+              {manga.genres?.map((genre) => (
                 <span
-                  key={g.mal_id}
-
+                  key={genre.mal_id}
                   className="
                     px-3
                     py-1
-
-                    bg-pink-100
-
                     rounded-full
+                    bg-(--accent)
+                    border
+                    border-(--border)
+                    text-sm
                   "
                 >
-                  {g.name}
+                  {genre.name}
                 </span>
               ))}
-            </div>
-
+            </div>{" "}
+            {/* INFO BOXES */}
             <div
               className="
                 flex
-
                 flex-col
-
                 md:flex-row
-
                 gap-4
-
                 mt-6
               "
             >
-              <div className="bg-white/70 p-3 rounded-xl border border-pink-200 flex-1">
-                <div className="text-pink-500 font-semibold">Status</div>
+              <div
+                className="
+                  bg-(--surface)
+                  p-3
+                  rounded-xl
+                  border
+                  border-(--border)
+                  flex-1
+                "
+              >
+                <div className="text-(--primary) font-semibold">Status</div>
 
-                <div className="text-gray-700">{manga.status}</div>
+                <div>{manga.status}</div>
               </div>
 
-              <div className="bg-white/70 p-3 rounded-xl border border-pink-200 flex-1">
-                <div className="text-pink-500 font-semibold">Score</div>
+              <div
+                className="
+                  bg-(--surface)
+                  p-3
+                  rounded-xl
+                  border
+                  border-(--border)
+                  flex-1
+                "
+              >
+                <div className="text-(--primary) font-semibold">Score</div>
 
-                <div className="text-yellow-500">⭐ {manga.score}</div>
+                <div className="text-(--primary)">⭐ {manga.score}</div>
               </div>
 
-              <div className="bg-white/70 p-3 rounded-xl border border-pink-200 flex-1">
-                <div className="text-pink-500 font-semibold">Authors</div>
+              <div
+                className="
+                  bg-(--surface)
+                  p-3
+                  rounded-xl
+                  border
+                  border-(--border)
+                  flex-1
+                "
+              >
+                <div className="text-(--primary) font-semibold">Authors</div>
 
-                <div className="text-gray-700">
-                  {manga.authors?.map((a) => a.name).join(", ")}
+                <div>
+                  {manga.authors?.map((author) => author.name).join(", ")}
                 </div>
               </div>
             </div>
-
+            {/* SYNOPSIS */}
             <div
               className="
                 mt-6
-
                 p-5
-
-                bg-white/80
-
+                bg-(--surface)
                 rounded-2xl
-
                 border
-
-                border-pink-200
+                border-(--border)
               "
             >
               {showTranslation && (
@@ -467,23 +456,14 @@ export default function MangaDetail() {
                   <span
                     className="
                       inline-flex
-
                       items-center
-
                       gap-2
-
                       px-3
-
                       py-1
-
                       rounded-full
-
-                      bg-violet-100
-
-                      text-violet-700
-
+                      bg-(--accent)
+                      text-(--heading)
                       text-xs
-
                       font-semibold
                     "
                   >
@@ -496,40 +476,26 @@ export default function MangaDetail() {
               <p
                 className="
                   leading-7
-
-                  text-gray-700
-
                   whitespace-pre-line
                 "
               >
-                {showTranslation ? translatedSynopsis : manga.synopsis}
+                {showTranslation
+                  ? translatedSynopsis
+                  : manga.synopsis || "No synopsis available."}
               </p>
 
               <div className="flex justify-center mt-6">
                 <button
                   onClick={translateSynopsis}
-
                   disabled={translating}
-
                   className="
                     px-5
                     py-2.5
-
                     rounded-full
-
-                    bg-purple-200
-
-                    text-slate-700
-
-                    font-medium
-
-                    shadow-md
-
-                    hover:bg-white
-
-                    transition
-
-                    disabled:opacity-50
+                    bg-(--accent)
+                    border
+                    border-(--border)
+                    hover:scale-105
                   "
                 >
                   {translating
@@ -547,18 +513,29 @@ export default function MangaDetail() {
       {/* RATING */}
 
       <div className="mt-10 text-center">
-        <h2 className="text-2xl font-bold text-pink-700 mb-2">Your Rating</h2>
+        <h2
+          className="
+            text-2xl
+            font-bold
+            text-(--heading)
+            mb-2
+          "
+        >
+          Your Rating
+        </h2>
 
         <div className="text-3xl">
-          {[1, 2, 3, 4, 5].map((s) => (
+          {[1, 2, 3, 4, 5].map((star) => (
             <span
-              key={s}
-
-              onClick={() => handleRating(s)}
-
-              className={`cursor-pointer transition hover:scale-125 ${
-                rating >= s ? "text-pink-500" : "text-gray-300"
-              }`}
+              key={star}
+              onClick={() => handleRating(star)}
+              className="
+                cursor-pointer
+                hover:scale-125
+              "
+              style={{
+                color: rating >= star ? "var(--primary)" : "var(--text-muted)",
+              }}
             >
               ★
             </span>
@@ -571,51 +548,34 @@ export default function MangaDetail() {
       <div className="mt-10">
         <textarea
           value={note}
-
           onChange={(e) => {
             setNote(e.target.value);
-
             setNoteSaved(false);
           }}
-
+          placeholder="Write your note..."
           className="
             w-full
-
             h-40
-
             p-4
-
             rounded-xl
-
             border
-
-            border-pink-200
-
-            focus:outline-none
-
-            focus:ring-2
-
-            focus:ring-purple-400
+            border-(--border)
+            bg-(--surface)
+            text-(--text)
           "
         />
 
         <button
           onClick={saveNote}
-
           className="
             mt-3
-
             px-4
-
             py-2
-
-            bg-purple-200
-
             rounded-lg
-
-            hover:bg-purple-300
-
-            transition
+            bg-(--accent)
+            border
+            border-(--border)
+            hover:scale-105
           "
         >
           {noteSaved ? "Saved ✓" : "Save Note"}
@@ -625,23 +585,26 @@ export default function MangaDetail() {
       {/* CHAPTERS */}
 
       <div className="mt-10">
-        <h2 className="text-2xl font-bold text-pink-700 mb-4">Chapters</h2>
+        <h2
+          className="
+            text-2xl
+            font-bold
+            text-(--heading)
+            mb-4
+          "
+        >
+          Chapters
+        </h2>
 
         <div
           className="
             p-6
-
-            bg-white/80
-
+            bg-(--surface)
             border
-
-            border-pink-200
-
+            border-(--border)
             rounded-2xl
-
             text-center
-
-            text-purple-700
+            text-(--heading)
           "
         >
           Coming Soon...
